@@ -2,9 +2,14 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import { OpenAI } from 'openai'; // Importando o OpenAI
 import { joinVoiceChannel } from '@discordjs/voice';
 import { handleVoice } from './voice/handler.js';
 import handleMessage from './events/messageCreate.js';
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // Chave da API OpenAI no arquivo .env
+});
 
 const client = new Client({
   intents: [
@@ -27,6 +32,30 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
   console.log(`Bot online como ${client.user.tag}`);
+});
+
+// Adicionando a função de comando para interagir com o GPT-4o
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+
+  if (message.content.startsWith('!chat')) {
+    const userMessage = message.content.slice(6); // Remove o "!chat "
+
+    try {
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [
+          { role: 'system', content: 'Você é um assistente útil.' },
+          { role: 'user', content: userMessage },
+        ],
+      });
+
+      message.reply(completion.choices[0].message.content);
+    } catch (error) {
+      console.error('Erro ao chamar OpenAI:', error);
+      message.reply('Desculpe, ocorreu um erro ao processar sua solicitação.');
+    }
+  }
 });
 
 client.on('interactionCreate', async interaction => {
