@@ -3,7 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import { joinVoiceChannel } from '@discordjs/voice';
-import handleVoice from './voice/handler.js';
+import { handleVoice } from './voice/handler.js';
+
 
 const client = new Client({
   intents: [
