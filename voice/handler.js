@@ -1,9 +1,9 @@
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const fs = require('fs');
-const { transcribeAudio } = require('../utils/whisper');  // Correção aqui
-const { handleVoiceCommand } = require('../utils/voiceCommands');  // Correção aqui
+import { joinVoiceChannel, createAudioPlayer, createAudioResource } from '@discordjs/voice';
+import fs from 'fs';
+import { transcribeAudio } from '../utils/whisper.js';
+import { handleVoiceCommand } from '../utils/voiceCommands.js';
 
-module.exports = async (client, oldState, newState) => {
+export async function handleVoice(client, oldState, newState) {
   if (!newState.channelId || newState.member.user.bot) return;
 
   const connection = joinVoiceChannel({
@@ -16,7 +16,6 @@ module.exports = async (client, oldState, newState) => {
   connection.subscribe(audioPlayer);
 
   const audioFilePath = '/tmp/audio.wav';
-  // Simulação de gravação e resposta (na prática usaria biblioteca externa)
   setTimeout(async () => {
     try {
       const transcript = await transcribeAudio(audioFilePath);
@@ -29,4 +28,4 @@ module.exports = async (client, oldState, newState) => {
       console.error("Erro no handler de voz:", err);
     }
   }, 5000);
-};
+}
