@@ -1,10 +1,9 @@
+import { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } from '@discordjs/voice';
+import fs from 'fs';
+import { transcribeAudio } from '../utils/whisper.js';
+import { handleVoiceCommand } from '../utils/voiceCommands.js';
 
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const fs = require('fs');
-const { transcribeAudio } = require('../utils/whisper');
-const { handleVoiceCommand } = require('../utils/voiceCommands');
-
-module.exports = async (client, oldState, newState) => {
+export default async (client, oldState, newState) => {
   if (!newState.channelId || newState.member.user.bot) return;
 
   const connection = joinVoiceChannel({
