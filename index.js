@@ -1,9 +1,9 @@
-require('dotenv').config();
-const fs = require('fs');
-const path = require('path');
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const { joinVoiceChannel } = require('@discordjs/voice');
-const handleVoice = require('./voice/handler');  // Correção aqui
+import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
+import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import { joinVoiceChannel } from '@discordjs/voice';
+import handleVoice from './voice/handler.js';
 
 const client = new Client({
   intents: [
