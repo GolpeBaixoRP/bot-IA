@@ -1,6 +1,7 @@
 
 import 'dotenv/config';
-const fs = require('fs');
+import fs from 'node:fs';
+
 const path = require('path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
