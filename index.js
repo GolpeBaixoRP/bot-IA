@@ -4,7 +4,7 @@ import path from 'path';
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import { joinVoiceChannel } from '@discordjs/voice';
 import { handleVoice } from './voice/handler.js';
-
+import handleMessage from './events/messageCreate.js';
 
 const client = new Client({
   intents: [
@@ -16,9 +16,10 @@ const client = new Client({
 });
 
 client.commands = new Collection();
+
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
-  const commands = require(`./commands/${file}`);
+  const { default: commands } = await import(`./commands/${file}`);
   for (const command of commands) {
     client.commands.set(command.data.name, command);
   }
@@ -40,7 +41,7 @@ client.on('interactionCreate', async interaction => {
   }
 });
 
-client.on('messageCreate', require('./events/messageCreate'));
+client.on('messageCreate', handleMessage);
 client.on('voiceStateUpdate', (oldState, newState) => handleVoice(client, oldState, newState));
 
 client.login(process.env.DISCORD_TOKEN);
