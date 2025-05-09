@@ -1,7 +1,6 @@
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
 
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-
-module.exports = [
+export default [
   {
     data: new SlashCommandBuilder()
       .setName('criar-canal')
